@@ -1,0 +1,72 @@
+#Junk Files
+*.DS_Store
+[Tt]humbs.db
+
+#Visual Studio Files
+[Oo]bj/
+[Bb]in/
+[Dd]ebug/
+[Bb]uild/
+[Aa]pp_Log/
+[Ll]ogs/
+.vs/
+*.user
+*.suo
+*.pdb
+*.aps
+*_i.c
+*_p.c
+*.ncb
+*.tlb
+*.tlh
+*.[Cc]ache
+*.bak
+*.ncb
+*.ilk
+*.log
+*.lib
+*.sbr
+*.sdf
+ipch/ 
+*.dbmdl
+*.csproj.user
+*.cache
+*.swp
+*.vspscc
+*.vssscc
+*.bak.*
+*.bak
+
+#Tools
+_ReSharper.*
+_ReSharper*/
+*.resharper
+*.resharper.user
+[Nn][Dd]epend[Oo]ut*/
+Ankh.NoLoad
+
+#Other
+.svn
+Version_Injected.txt
+
+packages
+Documentation/~$bscription Order Service - API reference.docx
+*.tmp
+Documentation/~$bscription Order Service - Client flow documentation.docx
+Documentation/~$$Tegning3.~vsdx
+*.~vsdx
+Documentation/~$rver setup.docx
+SubscriptionOrderService/SubscriptionOrderService/Properties/PublishProfiles/x.pubxml
+SubscriptionOrderService/SubscriptionOrderService/SubscriptionOrderService.SetParameters.xml
+SubscriptionOrderService/SubscriptionOrderService/SubscriptionOrderService.SourceManifest.xml
+SubscriptionOrderService/SubscriptionOrderService/SubscriptionOrderService.deploy-readme.txt
+SubscriptionOrderService/SubscriptionOrderService/SubscriptionOrderService.deploy.cmd
+Tools/swagger-codegen-cli.jar
+Tools/output/
+Tools/output2/
+Tools/outputSaapi/
+Tools/swagger.txt
+Tools/ModSwagger.yaml
+
+#DB files
+*.jfm
