@@ -15,15 +15,15 @@ namespace HotelBooking.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            //return new string[] { "value1", "value2" };
             BookingService bs = new BookingService();
+            return new string[] { "value5", "value6" };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value";
+            return "value 123";
         }
 
         // POST api/values
