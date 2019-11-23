@@ -49,18 +49,11 @@ function startTests() {
    	sleep 25
 	echo "makedir /backups"
    	docker exec -i Database mkdir /backups
-   	echo "copy database & tables .bak files into Database:/"
+   	echo "copy database & tables .bak file into Database:/"
    	docker cp $SQLFILE Database:/var/opt/mssql/data
-	docker cp $SQLINSERTFILE Database:/var/opt/mssql/data
-	echo "create the docker database"
+	echo "create the docker database from bak file (with seeded data)"
    	docker exec -i AT_DB ./opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
- 	-Q "RESTORE DATABASE migration_bordas_production FROM DISK = '/var/opt/mssql/data/testing.bak' WITH MOVE 'migration_bordas_production' TO '/var/opt/mssql/data/migration_bordas_production.mdf', MOVE 'migration_bordas_production_log' TO '/var/opt/mssql/data/migration_bordas_production_Log.ldf'"
-	# docker exec -i Database /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
-   	# -i tableCreationTIM.sql
-	echo "load the static data into the docker database"
-
-   	# docker exec -i Database /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
-   	# -i InsertTestTimData.sql
+ 	-Q "RESTORE DATABASE test_database FROM DISK = '/var/opt/mssql/data/testing.bak' WITH MOVE 'test_database' TO '/var/opt/mssql/data/migration_bordas_production.mdf', MOVE 'test_database_log' TO '/var/opt/mssql/data/migration_bordas_production_Log.ldf'"
 
 	echo "Start API"
 	docker run \
