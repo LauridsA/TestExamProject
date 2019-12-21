@@ -55,6 +55,7 @@ function startTests() {
 	echo "Start api"
 	docker run \
 	--name api \
+	-e "ASPNETENVIRONMENT=Docker"
 	-d \
 	--rm \
 	api

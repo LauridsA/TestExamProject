@@ -27,7 +27,23 @@ namespace HotelBooking
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            string conString = ConfigurationExtensions.GetConnectionString(Configuration, "DefaultConnection");
+            //gotta figure out when we are in docker, local or dev env.
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            
+            string conString;
+            if (env == "Docker")
+            {
+                conString = ConfigurationExtensions.GetConnectionString(Configuration, "Docker");
+            }
+            else if (env == "Development")
+            {
+                conString = ConfigurationExtensions.GetConnectionString(Configuration, "Development");
+            }
+            else
+            {
+                conString = ConfigurationExtensions.GetConnectionString(Configuration, "Local");
+            }
+            
             services.AddScoped<IBookingRepo, BookingRepo>(service =>
             {
                 return new BookingRepo(conString);
