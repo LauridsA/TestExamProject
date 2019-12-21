@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Services;
+using Services.Interfaces;
 
 namespace HotelBooking.Controllers
 {
@@ -11,11 +12,17 @@ namespace HotelBooking.Controllers
     [ApiController]
     public class BookingController : Controller
     {
+        private IBookingService bookingService;
+        public BookingController(IBookingService bookingService)
+        {
+            this.bookingService = bookingService;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            BookingService bs = new BookingService();
+            //bookingService. ...
             return new string[] { "value5", "value6" };
         }
 
@@ -23,7 +30,8 @@ namespace HotelBooking.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            return "value 123";
+            var res = bookingService.GetRoom(id);
+            return res.ToString();
         }
 
         // POST api/values

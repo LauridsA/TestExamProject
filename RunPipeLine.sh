@@ -2,9 +2,6 @@
 THISLOCATION="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 #the vars
-
-DOCKER_COMPOSE_BASE_FILE=$THISLOCATION/../../docker-compose.yml
-DOCKER_COMPOSE_FILE=$THISLOCATION/../../docker-compose.override.AT.yml
 DOCKER_COMPOSE_NAME=$TIM_AT
 
 # Stop on first error
@@ -32,45 +29,45 @@ trap onExit EXIT;
 
 function startTests() {
 	echo "Building images, API first"
-	docker build -t API -f "Dockerfile"
+	docker build -t api -f "Dockerfile" .
 	echo "Building images, Testing second"
-	docker build -t TESTING -f "DockerfileTest"
+	docker build -t testing -f "DockerfileTest" .
 
 	echo "RUN DB image"
 	docker run \
 		-e 'ACCEPT_EULA=Y' \
    		-e 'SA_PASSWORD=360@NoScopes!' \
    		-p 1433:1433 \
-   		--name Database \
+   		--name database \
 		--rm \
    		-d microsoft/mssql-server-linux:latest
 		
-   	echo "Populating Database"
+   	echo "Populating database"
    	sleep 25
 	echo "makedir /backups"
-   	docker exec -i Database mkdir /backups
-   	echo "copy database & tables .bak file into Database:/"
-   	docker cp $SQLFILE Database:/var/opt/mssql/data
+   	docker exec -i database mkdir /backups
+   	echo "copy database & tables .bak file into database:/"
+   	docker cp $SQLFILE database:/var/opt/mssql/data
 	echo "create the docker database from bak file (with seeded data)"
    	docker exec -i AT_DB ./opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
- 	-Q "RESTORE DATABASE test_database FROM DISK = '/var/opt/mssql/data/testing.bak' WITH MOVE 'test_database' TO '/var/opt/mssql/data/migration_bordas_production.mdf', MOVE 'test_database_log' TO '/var/opt/mssql/data/migration_bordas_production_Log.ldf'"
+ 	-Q "RESTORE database test_database FROM DISK = '/var/opt/mssql/data/testing.bak' WITH MOVE 'test_database' TO '/var/opt/mssql/data/migration_bordas_production.mdf', MOVE 'test_database_log' TO '/var/opt/mssql/data/migration_bordas_production_Log.ldf'"
 
-	echo "Start API"
+	echo "Start api"
 	docker run \
-	--name API \
+	--name api \
 	-d \
 	--rm \
-	API
+	api
 	sleep 25
 	echo "check the internal docker network"
 	docker network inspect bridge
-	echo "get the log statements from the API"
-	docker logs API
-	echo "docker run tests against the API"
+	echo "get the log statements from the api"
+	docker logs api
+	echo "docker run tests against the api"
 	docker run \
-	--name TESTING \
+	--name testing \
 	--rm \
-	TESTING
+	testing
 	SUCCESS_INDICATOR_Proj=$?
 	echo "$SUCCESS_INDICATOR_Proj"
 	# Exit with the exit code from the tests which will trigger the onExit function.
@@ -78,12 +75,12 @@ function startTests() {
 }
 
 function stopTests() {
-	echo "== REMOVING DOCKER CONTAINERS (API) =="
-	docker ps -q --filter "name=API" | grep -q . && docker stop API 
-	echo "== REMOVING DOCKER CONTAINERS (TESTING) =="
-	docker ps -q --filter "name=TESTING" | grep -q . && docker stop TIM_AT 
+	echo "== REMOVING DOCKER CONTAINERS (api) =="
+	docker ps -q --filter "name=api" | grep -q . && docker stop api 
+	echo "== REMOVING DOCKER CONTAINERS (testing) =="
+	docker ps -q --filter "name=testing" | grep -q . && docker stop testing 
 	echo "== REMOVING DOCKER CONTAINER (DB) =="
-	docker ps -q --filter "name=Database" | grep -q . && docker stop Database 
+	docker ps -q --filter "name=database" | grep -q . && docker stop database 
 }
 
 startTests

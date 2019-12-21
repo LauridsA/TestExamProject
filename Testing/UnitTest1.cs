@@ -8,6 +8,14 @@ namespace Testing
         [TestMethod]
         public void TestMethod1()
         {
+            //arrange
+            var senselessVariable = 1;
+
+            //act
+            var res = senselessVariable + 1;
+
+            //assert
+            Assert.AreEqual(res, senselessVariable + 1);
         }
     }
 }

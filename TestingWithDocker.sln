@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testing", "Testing\Testing.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HotelBooking", "HotelBooking\HotelBooking.csproj", "{3DEE41D4-B9C9-4356-AFA7-9995E064EB03}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{0972BED8-1652-48DD-89D1-CEF693742D05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{0972BED8-1652-48DD-89D1-CEF693742D05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{C70C8A8D-D824-4DF4-80D5-1D31B990CE04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{C70C8A8D-D824-4DF4-80D5-1D31B990CE04}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{5C71E52C-49E6-419B-8F4B-5761F0598C89}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "DataAccess\DataAccess.csproj", "{5C71E52C-49E6-419B-8F4B-5761F0598C89}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0EC8B279-B011-423F-9329-E6B476641380}"
 	ProjectSection(SolutionItems) = preProject
