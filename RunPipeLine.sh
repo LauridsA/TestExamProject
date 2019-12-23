@@ -2,7 +2,7 @@
 THISLOCATION="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 #the vars
-DOCKER_COMPOSE_NAME=$TIM_AT
+SQLFILE=$THISLOCATION/
 
 # Stop on first error
 set -e;
@@ -28,12 +28,12 @@ function onExit {
 trap onExit EXIT;
 
 function startTests() {
-	echo "Building images, API first"
-	docker build -t api -f "Dockerfile" .
-	echo "Building images, Testing second"
+	echo " ===== ===== Building images, API first ===== ====="
+	docker build -t api .
+	echo " ===== ===== Building images, Testing second ===== ====="
 	docker build -t testing -f "DockerfileTest" .
 
-	echo "RUN DB image"
+	echo " ===== ===== RUN DB image ===== ====="
 	docker run \
 		-e 'ACCEPT_EULA=Y' \
    		-e 'SA_PASSWORD=360@NoScopes!' \
@@ -42,17 +42,17 @@ function startTests() {
 		--rm \
    		-d microsoft/mssql-server-linux:latest
 		
-   	echo "Populating database"
+   	echo " ===== ===== Populating database ===== ====="
    	sleep 25
-	echo "makedir /backups"
-   	docker exec -i database mkdir /backups
-   	echo "copy database & tables .bak file into database:/"
+	echo " ===== ===== makedir /backups ===== ====="
+   	docker exec -i database mkdir ./backups
+   	echo " ===== ===== copy database & tables .bak file into database:/ ===== ====="
    	docker cp $SQLFILE database:/var/opt/mssql/data
-	echo "create the docker database from bak file (with seeded data)"
+	echo " ===== ===== create the docker database from bak file (with seeded data) ===== ====="
    	docker exec -i AT_DB ./opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
  	-Q "RESTORE database test_database FROM DISK = '/var/opt/mssql/data/testing.bak' WITH MOVE 'test_database' TO '/var/opt/mssql/data/migration_bordas_production.mdf', MOVE 'test_database_log' TO '/var/opt/mssql/data/migration_bordas_production_Log.ldf'"
 
-	echo "Start api"
+	echo " ===== ===== Start api ===== ====="
 	docker run \
 	--name api \
 	-e "ASPNETENVIRONMENT=Docker"
@@ -60,11 +60,11 @@ function startTests() {
 	--rm \
 	api
 	sleep 25
-	echo "check the internal docker network"
+	echo " ===== ===== check the internal docker network ===== ====="
 	docker network inspect bridge
-	echo "get the log statements from the api"
+	echo " ===== ===== get the log statements from the api ===== ====="
 	docker logs api
-	echo "docker run tests against the api"
+	echo " ===== ===== docker run tests against the api ===== ====="
 	docker run \
 	--name testing \
 	--rm \
@@ -76,11 +76,11 @@ function startTests() {
 }
 
 function stopTests() {
-	echo "== REMOVING DOCKER CONTAINERS (api) =="
+	echo " ===== ===== REMOVING DOCKER CONTAINERS (api) ===== ====="
 	docker ps -q --filter "name=api" | grep -q . && docker stop api 
-	echo "== REMOVING DOCKER CONTAINERS (testing) =="
+	echo "===== ===== REMOVING DOCKER CONTAINERS (testing) ===== ====="
 	docker ps -q --filter "name=testing" | grep -q . && docker stop testing 
-	echo "== REMOVING DOCKER CONTAINER (DB) =="
+	echo " ===== ===== REMOVING DOCKER CONTAINER (DB) ===== ====="
 	docker ps -q --filter "name=database" | grep -q . && docker stop database 
 }
 
