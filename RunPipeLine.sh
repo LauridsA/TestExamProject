@@ -2,7 +2,8 @@
 THISLOCATION="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 #the vars
-SQLFILE=$THISLOCATION/
+SQLCREATE=$THISLOCATION/CreateDatabaseScript.sql
+SQLINSERT=$THISLOCATION/Seed.sql
 
 # Stop on first error
 set -e;
@@ -46,30 +47,26 @@ function startTests() {
    	sleep 25
 	echo " ===== ===== makedir /backups ===== ====="
    	docker exec -i database mkdir ./backups
-   	echo " ===== ===== copy database & tables .bak file into database:/ ===== ====="
-   	docker cp $SQLFILE database:/var/opt/mssql/data
-	echo " ===== ===== create the docker database from bak file (with seeded data) ===== ====="
-   	docker exec -i AT_DB ./opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
- 	-Q "RESTORE database test_database FROM DISK = '/var/opt/mssql/data/testing.bak' WITH MOVE 'test_database' TO '/var/opt/mssql/data/migration_bordas_production.mdf', MOVE 'test_database_log' TO '/var/opt/mssql/data/migration_bordas_production_Log.ldf'"
-
+   	echo " ===== ===== copy database & tables .sql file into database:/ ===== ====="
+   	docker cp $SQLCREATE database:/
+	docker cp $SQLINSERT database:/
+	echo " ===== ===== create the docker database from sql files ===== ====="
+   	docker exec -i database ./opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
+ 	-i ./CreateDatabaseScript.sql
+	echo " ===== ===== seed database ===== ====="
+	 docker exec -i database ./opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
+ 	-i ./Seed.sql
 	echo " ===== ===== Start api ===== ====="
-	docker run \
-	--name api \
-	-e "ASPNETENVIRONMENT=Docker"
-	-d \
-	--rm \
-	api
+	docker run -e "ASPNETENVIRONMENT=Docker" -d --name api --rm api
 	sleep 25
 	echo " ===== ===== check the internal docker network ===== ====="
 	docker network inspect bridge
 	echo " ===== ===== get the log statements from the api ===== ====="
 	docker logs api
 	echo " ===== ===== docker run tests against the api ===== ====="
-	docker run \
-	--name testing \
-	--rm \
-	testing
+	docker run --name testing testing
 	SUCCESS_INDICATOR_Proj=$?
+	docker logs testing
 	echo "$SUCCESS_INDICATOR_Proj"
 	# Exit with the exit code from the tests which will trigger the onExit function.
 	exit "$SUCCESS_INDICATOR_Proj";

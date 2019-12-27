@@ -1,20 +1,9 @@
 FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 
-# Copy csproj and restore as distinct layers
-COPY DataAccess/*.csproj DataAccess/
-COPY HotelBooking/*.csproj HotelBooking/
-COPY Models/*.csproj Models/
-COPY Services/*.csproj Services/
-COPY Testing/*.csproj Testing/
-RUN dotnet restore Testing/Testing.csproj
-
-# Copy everything else and build
-COPY . ./
-RUN dotnet publish -c Release -o out
+# Copy everything over, blindly
+COPY . .
+RUN dotnet build
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
-WORKDIR /app
-COPY --from=build-env /app/Testing/out .
-ENTRYPOINT ["dotnet", "Testing/bin/Debug/netcoreapp2.2/Testing.dll"]
+ENTRYPOINT ["dotnet", "test"]

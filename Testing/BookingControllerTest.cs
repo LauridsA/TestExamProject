@@ -19,7 +19,7 @@ namespace Testing
         public void GetDetailsOfRoomTest()
         {
             //Connectionstrings to DB -- override
-
+            
             
             //act
 
@@ -27,6 +27,12 @@ namespace Testing
             //assert
 
 
+        }
+
+        [TestMethod]
+        public void NegativeTestFail()
+        {
+            Assert.Fail("Failed because I want it to");
         }
     }
 }
