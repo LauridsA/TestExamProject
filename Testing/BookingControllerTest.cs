@@ -19,7 +19,7 @@ namespace Testing
         [TestMethod]
         public void GetDetailsOfRoomTest()
         {
-            //Connectionstrings to DB -- override
+            //BasePath to API..
             
             
             //act
@@ -34,7 +34,7 @@ namespace Testing
         public void NegativeTestFail()
         {
             config.ResolvePaths(out connectionString, out basePathAPI);
-            Assert.Fail("ConnectionString:"+ connectionString);
+            Assert.Fail("ConnectionString: "+ connectionString);
         }
     }
 }

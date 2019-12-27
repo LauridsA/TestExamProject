@@ -1,4 +1,8 @@
 ﻿using DataAccess.ADO;
+using DataAccess.ADO.Interfaces;
+using HotelBooking;
+using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using System;
@@ -10,22 +14,29 @@ namespace Testing
     [TestClass]
     public class BookingRepoTest
     {
+        private ServiceProvider _serviceProvider;
         private string connectionString;
         private string basePathAPI;
         private ConfigurationHelper config = new ConfigurationHelper();
-        private BookingRepo repo;
+        private IBookingRepo repo;
 
         public BookingRepoTest()
         {
-            //empty
+
+            var webHost = WebHost.CreateDefaultBuilder()
+               .UseStartup<Startup>()
+               .Build();
+            _serviceProvider = new ServiceProvider(webHost);
             config.ResolvePaths(out connectionString, out basePathAPI);
-            repo = new BookingRepo(connectionString);
+            
         }
 
         [TestMethod]
         public void GetRoomDetailsTest()
         {
             //arrange
+            //repo = new BookingRepo(connectionString);
+            repo = _serviceProvider.GetService<IBookingRepo>();
             Room room = new Room();
             room.Id = 1;
             room.status = "A bit dusty";
