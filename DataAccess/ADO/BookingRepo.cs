@@ -30,7 +30,7 @@ namespace DataAccess.ADO
         {
             SqlCommand cmd;
             Room res = null;
-            string sql = "select * from something where id = '1'";
+            string sql = "SELECT * FROM Room WHERE id = '1'";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 cmd = new SqlCommand(sql, con);
@@ -42,11 +42,12 @@ namespace DataAccess.ADO
                     {
                         try
                         {
+                            read.Read();
                             //get the stuff
                             res = new Room();
                             res.Id = (int)read["id"];
                             res.status = read["status"].ToString();
-                            res.AveragePrice = (float)read["AveragePrice"];
+                            res.PricePerDay = (float)read["PricePerDay"];
                             res.available = (bool)read["Available"];
                         } catch (Exception e)
                         {

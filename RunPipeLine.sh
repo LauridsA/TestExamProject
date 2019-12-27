@@ -64,7 +64,7 @@ function startTests() {
 	echo " ===== ===== get the log statements from the api ===== ====="
 	docker logs api
 	echo " ===== ===== docker run tests against the api ===== ====="
-	docker run --name testing testing
+	docker run --name testing --rm testing
 	SUCCESS_INDICATOR_Proj=$?
 	docker logs testing
 	echo "$SUCCESS_INDICATOR_Proj"

@@ -10,7 +10,7 @@ namespace Models
         [DataMember(Name = "RoomId", EmitDefaultValue = false)]
         public int Id { get; set; }
         [DataMember(Name = "PricePerDay", EmitDefaultValue = false)]
-        public float AveragePrice { get; set; }
+        public float PricePerDay { get; set; }
         public enum RoomType 
         { 
             Basic = 1,

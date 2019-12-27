@@ -8,11 +8,12 @@ namespace Testing
     [TestClass]
     public class BookingControllerTest
     {
-        private string baseUrl;
+        private string connectionString;
+        private string basePathAPI;
+        private ConfigurationHelper config = new ConfigurationHelper();
         public BookingControllerTest ()
         {
-            var config = new ConfigurationHelper();
-            config.ResolvePaths(out baseUrl);
+            //empty
         }
 
         [TestMethod]
@@ -32,7 +33,8 @@ namespace Testing
         [TestMethod]
         public void NegativeTestFail()
         {
-            Assert.Fail("Failed because I want it to");
+            config.ResolvePaths(out connectionString, out basePathAPI);
+            Assert.Fail("ConnectionString:"+ connectionString);
         }
     }
 }
