@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 
 namespace Testing
@@ -13,20 +15,21 @@ namespace Testing
         private ConfigurationHelper config = new ConfigurationHelper();
         public BookingControllerTest ()
         {
-            //empty
+            //intentionally empty
         }
 
         [TestMethod]
-        public void GetDetailsOfRoomTest()
+        public async void GetDetailsOfRoomTest()
         {
-            //BasePath to API..
-            
-            
-            //act
+            //arrange
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri(basePathAPI);
 
+            //act
+            var res = await client.GetAsync("api/Booking/2");
             
             //assert
-
+            Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
 
         }
 
