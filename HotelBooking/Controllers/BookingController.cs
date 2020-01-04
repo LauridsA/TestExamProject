@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Services;
 using Services.Interfaces;
 
@@ -12,42 +13,45 @@ namespace HotelBooking.Controllers
     [ApiController]
     public class BookingController : Controller
     {
-        private IRoomService bookingService;
-        public BookingController(IRoomService bookingService)
+        private IBookingService bookingService;
+        public BookingController(IBookingService bookingService)
         {
             this.bookingService = bookingService;
         }
 
-        // GET api/values
+        // GET api/booking
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<string> Get()
         {
-            return new string[] { "value5", "value6" };
+            return "FRONT PAGE OF BOOKING CONTROLLER. ENDPOINTS: /{id} /delete/{id} /getAllBookings";
         }
 
-        // GET api/values/5
+        // EXAMPLE: GET api/booking/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Booking> Get(int id)
         {
-            return "Nothing Yet";
+            return bookingService.GetBookingDetails(id);
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody] string value)
+        // EXAMPLE: GET api/booking/getAllBookings
+        [HttpGet("getAllBookings")]
+        public ActionResult<List<Booking>> GetAllBookings()
         {
+            return bookingService.GetAllBookings();
         }
 
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/values/5
+        // EXAMPLE: DELETE api/booking/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            bookingService.DeleteBooking(id);
+        }
+
+        // EXAMPLE: POST api/booking/5
+        [HttpPost("{id}")]
+        public ActionResult<bool> BookRoom(int id, [FromBody] DateTime start, [FromBody] DateTime end)
+        {
+            return bookingService.BookRoom(id, start, end);
         }
     }
 }

@@ -58,11 +58,11 @@ namespace HotelBooking
             //booking
             services.AddScoped<IBookingService, BookingService>(service =>
             {
-                return new BookingService(service);
+                return new BookingService(service.GetService<IBookingRepo>(), service.GetService<IRoomRepo>());
             });
             services.AddScoped<IBookingRepo, BookingRepo>(service =>
             {
-                return new BookingRepo(conString);
+                return new BookingRepo(conString, service.GetService<IRoomRepo>());
             });
 
 

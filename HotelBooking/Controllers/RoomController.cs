@@ -22,7 +22,7 @@ namespace HotelBooking.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            return  "FRONT PAGE OF ROOM CONTROLLER. ENDPOINTS: /{id} /checkAvailablity/{id} /checkAllAvailableRooms" ;
+            return  "FRONT PAGE OF ROOM CONTROLLER. ENDPOINTS: /{id} /checkAvailablity/{id} /checkAllAvailableRooms/..." ;
         }
 
         // example: GET api/room/5
@@ -41,9 +41,9 @@ namespace HotelBooking.Controllers
 
         // example: GET api/room/checkAllAvaibleRooms/...
         [HttpGet("checkAllAvailableRooms/{id}")]
-        public ActionResult<List<Room>> CheckAllAvailableRooms()
+        public ActionResult<List<Room>> CheckAllAvailableRooms([FromBody] DateTime start, [FromBody] DateTime end)
         {
-            return roomService.GetAllAvailableRooms(DateTime.Today, DateTime.Today);
+            return roomService.GetAllAvailableRooms(start, end);
         }
         
     }
