@@ -21,7 +21,7 @@ namespace DataAccess.ADO
         {
             SqlCommand cmd;
             bool res = false;
-            string sql = "INSERT INTO [HotelBooking].[dbo].[Booking] (Id, RoomId, StartDate, EndDate, DateOfOrder, customerComment, totalPrice) VALUES ( " + booking+ ")";
+            string sql = "INSERT INTO [HotelBooking].[dbo].[Booking] (Id, RoomId, StartDate, EndDate, DateOfOrder, customerComment, totalPrice) VALUES (" + booking.Id+ ", "+booking.room.Id + ", " +booking.startDate + ", " +booking.endDate + ", " +booking.dateOfOrder + ", " +booking.customerComment + ", " +booking.totalPrice +");";
             using (SqlConnection con = new SqlConnection(connectionstring))
             {
                 cmd = new SqlCommand(sql, con);
@@ -176,7 +176,6 @@ namespace DataAccess.ADO
 
         public List<Booking> GetBookingsByRoom(Room room)
         {
-            //SELECT * FROM [HotelBooking].[dbo].[Booking] booking where booking.RoomId =
             SqlCommand cmd;
             List<Booking> res = new List<Booking>();
             string sql = "SELECT * FROM [HotelBooking].[dbo].[Booking] booking where booking.RoomId = " + room.Id;
