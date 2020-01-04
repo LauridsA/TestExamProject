@@ -46,14 +46,25 @@ namespace HotelBooking
                 conString = ConfigurationExtensions.GetConnectionString(Configuration, "Local");
             }
 
-            services.AddScoped<IBookingRepo, BookingRepo>(service =>
+            //room
+            services.AddScoped<IRoomRepo, RoomRepo>(service =>
             {
-                return new BookingRepo(conString);
+                return new RoomRepo(conString);
             });
+            services.AddScoped<IRoomService, RoomService>(service =>
+            {
+                return new RoomService(service.GetService<IRoomRepo>());
+            });
+            //booking
             services.AddScoped<IBookingService, BookingService>(service =>
             {
                 return new BookingService(service);
             });
+            services.AddScoped<IBookingRepo, BookingRepo>(service =>
+            {
+                return new BookingRepo(conString);
+            });
+
 
             //services.AddSwaggerGen(c =>
             //{
@@ -70,13 +81,9 @@ namespace HotelBooking
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseHttpsRedirection();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

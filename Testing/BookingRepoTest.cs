@@ -18,7 +18,7 @@ namespace Testing
         private string connectionString;
         private string basePathAPI;
         private ConfigurationHelper config = new ConfigurationHelper();
-        private IBookingRepo repo;
+        private IRoomRepo repo;
 
         public BookingRepoTest()
         {
@@ -36,7 +36,7 @@ namespace Testing
         {
             //arrange
             //repo = new BookingRepo(connectionString);
-            repo = _serviceProvider.GetService<IBookingRepo>();
+            repo = _serviceProvider.GetService<IRoomRepo>();
             Room room = new Room();
             room.Id = 1;
             room.status = "A bit dusty";

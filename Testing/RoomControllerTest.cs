@@ -8,25 +8,26 @@ using System.Text;
 namespace Testing
 {
     [TestClass]
-    public class BookingControllerTest
+    public class RoomControllerTest
     {
         private string connectionString;
         private string basePathAPI;
         private ConfigurationHelper config = new ConfigurationHelper();
-        public BookingControllerTest ()
+
+        public RoomControllerTest()
         {
-            //intentionally empty
+            config.ResolvePaths(out connectionString, out basePathAPI);
         }
 
         [TestMethod]
-        public async void GetDetailsOfRoomTest()
+        public void GetDetailsOfRoomTest()
         {
             //arrange
             HttpClient client = new HttpClient();
             client.BaseAddress = new Uri(basePathAPI);
 
             //act
-            var res = await client.GetAsync("api/Booking/2");
+            var res = client.GetAsync("api/Room/2").Result;
             
             //assert
             Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
@@ -36,7 +37,7 @@ namespace Testing
         [TestMethod]
         public void NegativeTestFail()
         {
-            config.ResolvePaths(out connectionString, out basePathAPI);
+            
             Assert.Fail("ConnectionString: "+ connectionString);
         }
     }

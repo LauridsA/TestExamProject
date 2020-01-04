@@ -44,11 +44,11 @@ namespace Testing
                     break;
                 case HotelAppEnvironment.DOCKER:
                     connectionString = @"server=172.17.0.2,1433;Initial catalog=HotelBooking;User=sa;Password=360@NoScopes!;MultipleActiveResultSets=True;";
-                    basePathAPI = @"172.17.0.3";
+                    basePathAPI = @"172.17.0.3/";
                     break;
                 case HotelAppEnvironment.LOCAL:
                     connectionString = @"server=.;Initial catalog=HotelBooking;User=sa;Password=360@NoScopes!;MultipleActiveResultSets=True;";
-                    basePathAPI = "172.0.0.1";
+                    basePathAPI = "https://172.0.0.1:44357/";
                     break;
             }
         }

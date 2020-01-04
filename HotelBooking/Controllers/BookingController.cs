@@ -12,8 +12,8 @@ namespace HotelBooking.Controllers
     [ApiController]
     public class BookingController : Controller
     {
-        private IBookingService bookingService;
-        public BookingController(IBookingService bookingService)
+        private IRoomService bookingService;
+        public BookingController(IRoomService bookingService)
         {
             this.bookingService = bookingService;
         }
@@ -22,7 +22,6 @@ namespace HotelBooking.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            //bookingService. ...
             return new string[] { "value5", "value6" };
         }
 
@@ -30,8 +29,7 @@ namespace HotelBooking.Controllers
         [HttpGet("{id}")]
         public ActionResult<string> Get(int id)
         {
-            var res = bookingService.GetRoom(id);
-            return res.ToString();
+            return "Nothing Yet";
         }
 
         // POST api/values

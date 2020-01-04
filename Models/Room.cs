@@ -11,22 +11,25 @@ namespace Models
         public int Id { get; set; }
         [DataMember(Name = "PricePerDay", EmitDefaultValue = false)]
         public float PricePerDay { get; set; }
-        public enum RoomType 
-        { 
-            Basic = 1,
-            Standard,
-            Deluxe,
-            Penthouse
-        }
 
         [DataMember(Name ="Status", EmitDefaultValue =false)]
         public string status { get; set; }
         [DataMember(Name = "Available", EmitDefaultValue = false)]
         public bool available { get; set; }
 
+        [DataMember(Name = "RoomType", EmitDefaultValue = false)]
+        public RoomType roomType { get; set; }
+
         public Room ()
         {
             //intentionally empty
+        }
+        public enum RoomType 
+        { 
+            Basic = 1,
+            Standard,
+            Deluxe,
+            Penthouse
         }
 
     }

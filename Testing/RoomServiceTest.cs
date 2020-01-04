@@ -11,12 +11,12 @@ using System.Text;
 namespace Testing
 {
     [TestClass]
-    public class BookingServiceTest
+    public class RoomServiceTest
     {
-        private IBookingService _service;
+        private IRoomService _service;
         private ServiceProvider _serviceProvider;
 
-        public BookingServiceTest()
+        public RoomServiceTest()
         {
             var webHost = WebHost.CreateDefaultBuilder()
                .UseStartup<Startup>()
@@ -29,7 +29,7 @@ namespace Testing
         public void Test()
         {
             //arrange
-            _service = _serviceProvider.GetService<IBookingService>();
+            _service = _serviceProvider.GetService<IRoomService>();
 
             //act
             var res = _service.GetRoom(1);
