@@ -23,7 +23,7 @@ namespace HotelBooking.Controllers
         [HttpGet]
         public ActionResult<string> Get()
         {
-            return "FRONT PAGE OF BOOKING CONTROLLER. ENDPOINTS: /{id} /delete/{id} /getAllBookings";
+            return "FRONT PAGE OF BOOKING CONTROLLER. ENDPOINTS: /{id} /delete/{id} /getAllBookings /BookRoom/{id}";
         }
 
         // EXAMPLE: GET api/booking/5
@@ -48,10 +48,10 @@ namespace HotelBooking.Controllers
         }
 
         // EXAMPLE: POST api/booking/5
-        [HttpPost("{id}")]
-        public ActionResult<bool> BookRoom(int id, [FromBody] DateTime start, [FromBody] DateTime end)
+        [HttpPost("BookRoom/{id}")]
+        public ActionResult<bool> BookRoom(int id, [FromBody] DateTime start, [FromBody] DateTime end, [FromBody] string customerComment)
         {
-            return bookingService.BookRoom(id, start, end);
+            return bookingService.BookRoom(id, start, end, customerComment);
         }
     }
 }

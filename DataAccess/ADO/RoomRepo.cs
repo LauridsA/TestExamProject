@@ -22,7 +22,7 @@ namespace DataAccess.ADO
             SqlCommand cmd;
             List<Room> res = new List<Room>();
             //i wonder if i gotta convert this.
-            string sql = "SELECT * FROM [HotelBooking].[dbo].[Room] as A WHERE A.[Id] NOT IN(SELECT room.[Id] FROM [HotelBooking].[dbo].[Room] room JOIN [HotelBooking].[dbo].[Booking] booking ON booking.[RoomId] = room.[Id] WHERE booking.StartDate < "+ start+ " AND booking.EndDate < " +end+ ")";
+            string sql = "SELECT * FROM [HotelBooking].[dbo].[Room] as A WHERE A.[Id] NOT IN(SELECT room.[Id] FROM [HotelBooking].[dbo].[Room] room JOIN [HotelBooking].[dbo].[Booking] booking ON booking.[RoomId] = room.[Id] WHERE booking.StartDate < "+ start.Date+ " AND booking.EndDate < " +end.Date+ ")";
             using (SqlConnection con = new SqlConnection(connectionString))
             {
                 cmd = new SqlCommand(sql, con);

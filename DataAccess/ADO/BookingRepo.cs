@@ -17,21 +17,65 @@ namespace DataAccess.ADO
             this.roomRepo = roomRepo;
         }
 
-        public bool BookRoom(Room room, DateTime start, DateTime end)
+        public bool BookRoom(Booking booking)
         {
-            throw new NotImplementedException();
+            SqlCommand cmd;
+            bool res = false;
+            string sql = "INSERT INTO [HotelBooking].[dbo].[Booking] (Id, RoomId, StartDate, EndDate, DateOfOrder, customerComment, totalPrice) VALUES ( " + booking+ ")";
+            using (SqlConnection con = new SqlConnection(connectionstring))
+            {
+                cmd = new SqlCommand(sql, con);
+                try
+                {
+                    con.Open();
+                    var read = cmd.ExecuteNonQuery();
+                    if (read > 1) throw new Exception("Seems like too many rows were inserted");
+                    else if (read == 1) res = true;
+                }
+                catch (SqlException e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return res;
         }
 
         public bool DeleteBooking(int bookingId)
         {
-            throw new NotImplementedException();
+            SqlCommand cmd;
+            bool res = false;
+            string sql = "DELETE * FROM [HotelBooking].[dbo].[Booking] WHERE Id = " + bookingId;
+            using (SqlConnection con = new SqlConnection(connectionstring))
+            {
+                cmd = new SqlCommand(sql, con);
+                try
+                {
+                    con.Open();
+                    var read = cmd.ExecuteNonQuery();
+                    if (read > 1) throw new Exception("Seems like too many rows were deleted");
+                    else res = true;
+                }
+                catch (SqlException e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
+            return res;
         }
 
         public List<Booking> GetAllBookings()
         {
             SqlCommand cmd;
             List<Booking> res = new List<Booking>() ;
-            int? roomId = null;
+            int[] roomId = new int[50];
             string sql = "SELECT * FROM [HotelBooking].[dbo].[Booking]";
             using (SqlConnection con = new SqlConnection(connectionstring))
             {
@@ -44,6 +88,7 @@ namespace DataAccess.ADO
                     {
                         try
                         {
+                            int counter = 0;
                             while(read.Read())
                             {
                                 //get the stuff
@@ -54,7 +99,9 @@ namespace DataAccess.ADO
                                 booking.startDate = (DateTime)read["StartDate"];
                                 booking.endDate = (DateTime)read["EndDate"];
                                 booking.totalPrice = (float)read["totalPrice"];
-                                roomId = (int)read["RoomId"];
+                                roomId[counter] = (int)read["RoomId"];
+                                res.Add(booking);
+                                counter++;
                             }
                         }
                         catch (Exception e)
@@ -72,8 +119,10 @@ namespace DataAccess.ADO
                     con.Close();
                 }
             }
-            //if (roomId != null)
-            //    res.room = roomRepo.GetRoomDetails(roomId);
+            for (var i = 0; i <= res.Count; i++)
+            {
+                res[i].room = roomRepo.GetRoomDetails(roomId[i]);
+            }
             return res;
         }
 
@@ -122,6 +171,54 @@ namespace DataAccess.ADO
             }
             if (roomId != null)
                 res.room = roomRepo.GetRoomDetails((int)roomId);
+            return res;
+        }
+
+        public List<Booking> GetBookingsByRoom(Room room)
+        {
+            //SELECT * FROM [HotelBooking].[dbo].[Booking] booking where booking.RoomId =
+            SqlCommand cmd;
+            List<Booking> res = new List<Booking>();
+            string sql = "SELECT * FROM [HotelBooking].[dbo].[Booking] booking where booking.RoomId = " + room.Id;
+            using (SqlConnection con = new SqlConnection(connectionstring))
+            {
+                cmd = new SqlCommand(sql, con);
+                try
+                {
+                    con.Open();
+                    var read = cmd.ExecuteReader();
+                    if (read.HasRows)
+                    {
+                        try
+                        {
+                            while (read.Read())
+                            {
+                                //get the stuff
+                                var booking = new Booking();
+                                booking.Id = (int)read["Id"];
+                                booking.customerComment = read["customerComment"].ToString();
+                                booking.dateOfOrder = (DateTime)read["DateOfOrder"];
+                                booking.startDate = (DateTime)read["StartDate"];
+                                booking.endDate = (DateTime)read["EndDate"];
+                                booking.totalPrice = (float)read["totalPrice"];
+                                res.Add(booking);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            throw e;
+                        }
+                    }
+                }
+                catch (SqlException e)
+                {
+                    throw e;
+                }
+                finally
+                {
+                    con.Close();
+                }
+            }
             return res;
         }
     } 

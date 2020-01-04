@@ -17,12 +17,12 @@ namespace Services
         }
         public Room GetRoom(int i)
         {
-            return repo.GetRoomDetails(1);
+            return repo.GetRoomDetails(i);
         }
 
         public List<Room> GetAllAvailableRooms(DateTime start, DateTime end)
         {
-            if (start >= end) throw new ArgumentException("start should be larger or equal to end");
+            if (start.Date > end.Date) throw new ArgumentException("start should be before end");
             return repo.GetAllAvailableRooms(start, end);
         }
 
