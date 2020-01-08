@@ -29,8 +29,10 @@ namespace DataAccess.ADO
                 {
                     con.Open();
                     var read = cmd.ExecuteNonQuery();
-                    if (read > 1) throw new Exception("Seems like too many rows were inserted");
-                    else if (read == 1) res = true;
+                    if (read > 1) 
+                        throw new Exception("Seems like too many rows were inserted");
+                    else if (read == 1) 
+                        res = true;
                 }
                 catch (SqlException e)
                 {

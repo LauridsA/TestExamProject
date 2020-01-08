@@ -17,10 +17,10 @@ namespace Services
             this.roomRepo = roomRepo;
         }
 
-        public bool BookRoom(int roomId, DateTime start, DateTime end, string customerComment)
+        public bool BookRoom(int roomId, DateTime newBookingStart, DateTime newBookingEnd, string customerComment)
         {
             //is the data valid?
-            if (start.Date > end.Date)
+            if (newBookingStart.Date > newBookingEnd.Date)
                 throw new ArgumentException("Illegal: start should be before end");
 
             //which room are we dealing with?
@@ -30,16 +30,16 @@ namespace Services
             var bookings = repo.GetBookingsByRoom(room);
             foreach (var item in bookings)
             {
-                if (item.startDate.Date > start.Date || item.endDate.Date > end.Date)
+                if (!((item.startDate.Date > newBookingStart.Date && item.startDate.Date > newBookingEnd.Date ) || (newBookingStart.Date > item.endDate.Date && newBookingEnd.Date >item.endDate.Date)))
                     throw new Exception("Room is not available in this period! It clashed with Booking ID: "+item.Id);
             }
                 
             //all is well. Let's create the booking.
             Booking booking = new Booking();
             booking.room = room;
-            booking.startDate = start;
-            booking.endDate = end;
-            booking.totalPrice = (end.Day + 1 - start.Day) * room.PricePerDay;
+            booking.startDate = newBookingStart;
+            booking.endDate = newBookingEnd;
+            booking.totalPrice = (newBookingEnd.Day + 1 - newBookingStart.Day) * room.PricePerDay;
             booking.dateOfOrder = DateTime.Today;
             booking.customerComment = customerComment;
             return repo.BookRoom(booking);
