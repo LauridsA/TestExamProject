@@ -27,7 +27,7 @@ namespace Testing
             client.BaseAddress = new Uri(basePathAPI);
 
             //act
-            var res = client.GetAsync("api/Room/2").Result;
+            var res = client.GetAsync("api/Room/checkAvailablity/2").Result;
             
             //assert
             Assert.AreEqual(HttpStatusCode.OK, res.StatusCode);
@@ -38,7 +38,7 @@ namespace Testing
         public void NegativeTestFail()
         {
             
-            Assert.Fail("ConnectionString: "+ connectionString);
+            Assert.Fail("ConnectionString: "+ connectionString + " and base path was found to be " + basePathAPI);
         }
     }
 }

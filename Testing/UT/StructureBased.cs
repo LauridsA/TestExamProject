@@ -7,20 +7,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Services.Interfaces;
+using System;
 
-namespace Testing.End_To_End
+namespace Testing.UT
 {
     [TestClass]
-    public class UnitTestsBooking
+    public class StructureBased
     {
         private ServiceProvider _serviceProvider;
         private ConfigurationHelper config = new ConfigurationHelper();
         private string connectionString;
-        private IBookingRepo repo;
         private IBookingService service;
         private string basePathAPI;
         
-        public UnitTestsBooking ()
+        public StructureBased ()
         {
             var webHost = WebHost.CreateDefaultBuilder()
                .UseStartup<Startup>()
@@ -30,16 +30,25 @@ namespace Testing.End_To_End
         }
 
         [TestMethod]
-        public void TestMethod1()
+        public void BookRoomService_endBeforeStart_Invalid()
         {
             //arrange
-            var senselessVariable = 1;
+            service = _serviceProvider.GetService<IBookingService>();
+            var roomId = 1;
+            DateTime start = DateTime.Today;
+            DateTime end = DateTime.Today.AddDays(-1);
+            string customerComment = "I am a fool for trying this";
 
             //act
-            var res = senselessVariable + 1;
+            try
+            {
+            service.BookRoom(roomId, start, end, customerComment);
+                Assert.Fail("Expected exception");
+            } catch (Exception e)
+            {
+                Assert.AreEqual("Illegal: start should be before end", e.Message);
+            }
 
-            //assert
-            Assert.AreEqual(res, senselessVariable + 1);
         }
     }
 }

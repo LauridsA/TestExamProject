@@ -43,12 +43,12 @@ namespace Testing
                     connectionString = "DEVELOPMENT BASEPATH";
                     break;
                 case HotelAppEnvironment.DOCKER:
-                    connectionString = @"server=172.17.0.2,1433;Initial catalog=HotelBooking;User=sa;Password=360@NoScopes!;MultipleActiveResultSets=True;";
-                    basePathAPI = @"172.17.0.3/";
+                    connectionString = @"Server=172.17.0.2,1433;Initial catalog=HotelBooking;User=sa;Password=360@NoScopes!;MultipleActiveResultSets=True;";
+                    basePathAPI = "https://172.17.0.3:8000/";
                     break;
                 case HotelAppEnvironment.LOCAL:
-                    connectionString = @"server=.;Initial catalog=HotelBooking;User=sa;Password=360@NoScopes!;MultipleActiveResultSets=True;";
-                    basePathAPI = "https://172.0.0.1:44357/";
+                    connectionString = @"Server=.;Initial catalog=HotelBooking;Integrated Security=true;MultipleActiveResultSets=True;";
+                    basePathAPI = "https://localhost:44357/";
                     break;
             }
         }

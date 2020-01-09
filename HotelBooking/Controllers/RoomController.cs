@@ -41,9 +41,9 @@ namespace HotelBooking.Controllers
 
         // example: GET api/room/checkAllAvaibleRooms/...
         [HttpGet("checkAllAvailableRooms/{id}")]
-        public ActionResult<List<Room>> CheckAllAvailableRooms([FromBody] DateTime start, [FromBody] DateTime end)
+        public ActionResult<List<Room>> CheckAllAvailableRooms([FromBody] CheckRoomRequestObject requestObject)
         {
-            return roomService.GetAllAvailableRooms(start, end);
+            return roomService.GetAllAvailableRooms(requestObject.start, requestObject.end);
         }
         
     }

@@ -48,10 +48,15 @@ namespace HotelBooking.Controllers
         }
 
         // EXAMPLE: POST api/booking/5
-        [HttpPost("BookRoom/{id}")]
-        public ActionResult<bool> BookRoom(int id, [FromBody] DateTime start, [FromBody] DateTime end, [FromBody] string customerComment)
+        [HttpPost]
+        [Route("bookRoom/{id}")]
+        public ActionResult<bool> BookRoom(int id, [FromBody] BookingRequest requestObject)
         {
-            return bookingService.BookRoom(id, start, end, customerComment);
+            if (requestObject.start.Date < DateTime.Today)
+                return BadRequest("start date cannot be in the past");
+            if (requestObject.end.Date < DateTime.Today)
+                return BadRequest("end date is in the past");
+            return bookingService.BookRoom(id, requestObject.start, requestObject.end, requestObject.customerComment);
         }
     }
 }

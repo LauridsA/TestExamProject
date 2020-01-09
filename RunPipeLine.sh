@@ -57,7 +57,7 @@ function startTests() {
 	 docker exec -i database ./opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P '360@NoScopes!' \
  	-i ./Seed.sql
 	echo " ===== ===== Start api ===== ====="
-	docker run -e "ASPNETENVIRONMENT=Docker" -d --name api --rm api
+	docker run -e "ASPNETENVIRONMENT=Docker" -p 8000:80 -d --name api --rm api
 	sleep 25
 	echo " ===== ===== check the internal docker network ===== ====="
 	docker network inspect bridge
